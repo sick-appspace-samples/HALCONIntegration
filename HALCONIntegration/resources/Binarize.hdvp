@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="12.0.2">
+<procedure name="Binarize">
+<interface>
+<io>
+<par name="InputImage" base_type="iconic" dimension="0"/>
+</io>
+<oo>
+<par name="OutputImage" base_type="iconic" dimension="0"/>
+</oo>
+<ic>
+<par name="GrayLevel" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="PixelCount" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>threshold(InputImage, Region1, 0, GrayLevel)</l>
+<l>threshold(InputImage, Region2, GrayLevel+1, 255)</l>
+<c>* binarize the image</c>
+<l>paint_region(Region1, InputImage,  OutputImage, 0, 'fill')</l>
+<l>paint_region(Region2, OutputImage, OutputImage, 255, 'fill')</l>
+<c>* count the pixels in each region</c>
+<c></c>
+<l>region_features (Region1, 'area', C1)</l>
+<l>region_features (Region2, 'area', C2)</l>
+<c>* perpare control ouput array</c>
+<l>PixelCount := [C1, C2]</l>
+<l>return ()</l>
+</body>
+<docu id="Binarize">
+<parameters>
+<parameter id="GrayLevel"/>
+<parameter id="InputImage"/>
+<parameter id="OutputImage"/>
+<parameter id="PixelCount"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
