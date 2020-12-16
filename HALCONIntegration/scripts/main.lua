@@ -33,8 +33,7 @@ cam:setPath('resources/')
 cam:setCycleTime(1000)
 
 -- Creating a viewer instance to see the result in an Image View
-local viewer = View.create()
-viewer:setID('viewer2D')
+local viewer = View.create("viewer2D1")
 
 local sDecoration = View.ShapeDecoration.create()
 sDecoration:setLineColor(255, 0, 0) -- RED
