@@ -9,14 +9,11 @@ cam:setPath('resources/')
 cam:setCycleTime(1000)
 
 -- Creating a viewer instance to see the result in an Image View
-local viewer = View.create("viewer2D1")
+local viewer = View.create()
 
-local sDecoration = View.ShapeDecoration.create()
-sDecoration:setLineColor(255, 0, 0) -- RED
+local sDecoration = View.ShapeDecoration.create():setLineColor(255, 0, 0) -- RED
 
-local textDecoration = View.TextDecoration.create()
-textDecoration:setPosition(10, 10)
-textDecoration:setSize(4)
+local textDecoration = View.TextDecoration.create():setPosition(10, 10):setSize(4)
 
 local hdevBinarizer = Halcon.create()
 
@@ -36,9 +33,11 @@ end
 --Registration of the 'main' function to the 'Engine.OnStarted' event
 Script.register('Engine.OnStarted', main)
 
--- This function binarizes the Image by using an HALCON script
--- The binarized image is returned as well as the counted pixels
---@binarizeImage(img:Image)
+--- This function binarizes the Image by using an HALCON script
+--- The binarized image is returned as well as the counted pixels
+---@param img Image
+---@return Image
+---@return float[]
 local function binarizeImage(img)
   -- set the image and control input parameters of the HALCON function Binarize.hdvp
   hdevBinarizer:setImage('InputImage', img)
@@ -54,9 +53,9 @@ local function binarizeImage(img)
   return binImage, countedPixels
 end
 
--- This callback is called for every new image
---@handleNewImage(img:Image, suppl:SensorData)
-local function handleNewImage(img, _)
+--- This callback is called for every new image
+---@param img Image
+local function handleNewImage(img)
   viewer:clear()
   print('handleNewImage')
   local tic = DateTime.getTimestamp()
@@ -73,14 +72,14 @@ local function handleNewImage(img, _)
 
     -- finally display the data
     -- Print the processing time and the results into the view
-    local imageID = viewer:addImage(binarizedImage)
-    viewer:addText(outString, textDecoration, nil, imageID)
+    viewer:addImage(binarizedImage)
+    viewer:addText(outString, textDecoration)
     viewer:present()
 
     print(outString)
   else
-    local imageID = viewer:addImage(img, sDecoration)
-    viewer:addText('No image processing running', textDecoration, nil, imageID)
+    viewer:addImage(img, sDecoration)
+    viewer:addText('No image processing running', textDecoration)
     viewer:present()
   end
 end
